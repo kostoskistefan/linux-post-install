@@ -42,6 +42,16 @@ while true; do
     esac
 done
 
+echo -e ${YELLOW}'[!]'${RESET} This script requires a few tools to be installed!
+while true; do
+    read -p "Would you like to install them now if they are not already installed? (y/n) " yn
+    case $yn in
+        [Yy]* ) apt install curl unzip; break;;
+        [Nn]* ) break;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+
 echo ""
 echo -e ${GREEN}'[+]'${RESET} "Initial setup finished. Moving on to installing software..."
 
@@ -52,6 +62,7 @@ declare -a apt_apps=(
     "zsh"
     "neovim"
     "tmux"
+    "jq"
     "conky"
     "nodejs"
     "npm"
@@ -114,6 +125,14 @@ yes | cp -rf ./.tmux.conf $HOME/.tmux.conf
 $HOME/tmux/plugins/tpm/scripts/./install_plugins.sh
 tmux source ~/.tmux.conf
 echo -e ${GREEN}'[+]'${RESET} "Successfully configured Tmux"
+
+# Install Dash To Panel GNOME extension
+download_url='https://extensions.gnome.org/download-extension/dash-to-panel@jderose9.github.com.shell-extension.zip?version_tag=18465'
+extract_dir='$HOME/.local/share/gnome-shell/extensions/dash-to-panel@jderose9.github.com'
+curl -L $download_url -o /tmp/dash.zip
+mkdir -p $extract_dir
+unzip /tmp/dash.zip -d $extract_dir
+gnome-extensions enable dash-to-panel@jderose9.github.com
 
 # Configure Conky
 ## My city ID = 786735

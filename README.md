@@ -16,10 +16,12 @@ Currently it includes the following software:
 * Powerline Fonts
 * Poiret One Font
 * GNOME Startup Settings
+* GNOME Dash-To-Panel Extension
 
 ## Requirements
 * Advanced Package Tool (APT)
 * curl
+* unzip
 
 ## Usage
 Clone this repository: `git clone https://github.com/kostoskistefan/linux-post-install.git`
