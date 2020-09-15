@@ -5,8 +5,7 @@ RED="\033[01;31m"       # Issues/Errors
 GREEN="\033[01;32m"     # Success
 YELLOW="\033[01;33m"    # Information
 RESET="\033[00m"        # Normal
-echo -e ${GREEN}"TEST"
-exit
+
 script_location="$(cd "$(dirname "$0")" > /dev/null 2>&1 ; pwd -P)"
 
 # Check if running as root
@@ -31,7 +30,7 @@ echo -e ${YELLOW}'[!]'${RESET} This script requires a few tools to be installed!
 while true; do
     read -p "Would you like to install the missing tools? (y/n) " yn
     case $yn in
-        [Yy]* ) sudo apt install -q git curl unzip gnome-tweaks; break;;
+        [Yy]* ) sudo apt install -q git curl wget unzip gnome-tweaks; break;;
         [Nn]* ) break;;
         * ) echo "Please answer yes or no.";;
     esac
@@ -43,7 +42,6 @@ echo
 
 # A list of packages to install
 declare -a apt_apps=(
-    "google-chrome-stable"
     "fonts-powerline"
     "zsh"
     "neovim"
@@ -68,6 +66,16 @@ do
     fi
     echo 
 done
+
+echo -e ${YELLOW}"Installing Google Chrome Browser"${RESET}
+if [ $(dpkg-query -W -f='${Status}' startup-settings 2>/dev/null | grep -c "ok installed" ) -ne 0 ]
+then
+    echo -e ${YELLOW}'[!]'${RESET} "Google Chrome Browser installation detected. Skipping!"
+else
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    sudo apt install ./google-chrome-stable_current_amd64.deb
+    echo -e ${GREEN}'[+]'${RESET} "Successfully installed Google Chrome Browser"
+fi
 
 echo 
 echo -e ${YELLOW}"All packages have been installed. Starting configuration..."${RESET}
@@ -139,7 +147,7 @@ fi
 # Installing Vim-Plug plugins
 echo 
 echo -e ${YELLOW}"Installing Vim-Plug plugins"${RESET}
-if [ -z "$(ls -A $HOME/.local/share/nvim/)" ]
+if [ -d "$HOME/.config/nvim/plugged" ]
 then
 	echo -e ${YELLOW}'[!]'${RESET} "Vim-Plug plugins installation detected. Skipping!"
 else
@@ -173,8 +181,9 @@ then
 else
 	sudo curl -L $download_url -o $script_location/dash.zip
 	mkdir -p $HOME/$extract_dir
-	sudo unzip $script_location/dash.zip -d $HOME/$extract_dir
-	sudo gnome-extensions enable dash-to-panel@jderose9.github.com
+    sudo chown -R $(whoami): $HOME/$extract_dir 
+	unzip -q $script_location/dash.zip -d $HOME/$extract_dir/
+	gnome-extensions enable dash-to-panel@jderose9.github.com
 	echo -e ${GREEN}'[+]'${RESET} "Successfully installed Dash To Panel"
 fi
 
@@ -245,6 +254,7 @@ echo -e ${GREEN}'[+]'${RESET} "Installation and configuration completed!"
 
 echo -e ${GREEN}'[+]'${RESET} "Cleaning Up!"
 [ -f "$script_location/dash.zip" ] && sudo rm $script_location/dash.zip
+[ -f "$script_location/google-chrome-stable_current_amd64.deb" ] && sudo rm $script_location/google-chrome-stable_current_amd64.deb
 [ -d "$script_location/conky-Vision" ] && sudo rm -rf $script_location/conky-Vision
 
 echo -e ${YELLOW}"Please restart your computer for all changes to take effect!"${RESET}

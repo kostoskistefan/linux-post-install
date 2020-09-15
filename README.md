@@ -32,7 +32,9 @@ This script will prompt you to update your system, as well as install the requir
 ## Requirements
 * Advanced Package Tool (APT)
 * Client URL (cURL)
-* unzip
+* Wget
+* Unzip
+* Git
 * GNOME Tweak Tool
 
 ## Usage
