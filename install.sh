@@ -36,7 +36,7 @@ echo -e ${YELLOW}'[!]'${RESET} It is highly recommended to update the system!
 while true; do
     read -p "Would you like to update now? (y/n) " yn
     case $yn in
-        [Yy]* ) apt update && apt upgrade; break;;
+        [Yy]* ) apt update -qq && apt upgrade -qq; break;;
         [Nn]* ) break;;
         * ) echo "Please answer yes or no.";;
     esac
@@ -46,14 +46,15 @@ echo -e ${YELLOW}'[!]'${RESET} This script requires a few tools to be installed!
 while true; do
     read -p "Would you like to install them now if they are not already installed? (y/n) " yn
     case $yn in
-        [Yy]* ) apt install curl unzip; break;;
+        [Yy]* ) apt install -qq curl unzip gnome-tweaks; break;;
         [Nn]* ) break;;
         * ) echo "Please answer yes or no.";;
     esac
 done
 
 echo ""
-echo -e ${GREEN}'[+]'${RESET} "Initial setup finished. Moving on to installing software..."
+echo -e ${GREEN}'[+]'${RESET} "Initial setup finished. Proceeding with installation..."
+echo ""
 
 # A list of packages to install
 declare -a apt_apps=(
@@ -66,11 +67,13 @@ declare -a apt_apps=(
     "conky"
     "nodejs"
     "npm"
-    "code")
+    "code"
+    "numix-icon-theme-circle")
 
 # Install the packages
 for package in "${apt_apps[@]}"
 do
+    echo -e ${YELLOW}"Installing $package"${RESET} 
     apt-get install -qq -y $package >> /dev/null
     if [ $? -eq 0 ]
     then
@@ -78,10 +81,11 @@ do
     else 
         echo -e ${RED}'[-]'${RESET} "Unable to install $package."
     fi
+    echo ""
 done
 
 echo ""
-echo -e ${YELLOW}"All apt packages installed. Starting configuration..."${RESET}
+echo -e ${YELLOW}"All packages have been installed. Starting configuration..."${RESET}
 
 # Install Oh-My-ZSH
 echo ""
@@ -156,6 +160,19 @@ echo -e ${YELLOW}"Installing GNOME Startup-Manager"${RESET}
 wget https://github.com/hant0508/startup-settings/raw/master/debian/startup-settings-amd64.deb
 dpkg -i startup-settings-amd64.deb
 echo -e ${GREEN}'[+]'${RESET} "Successfully installed GNOME Startup-Manager"
+
+# Install Numix Circle Icons
+echo ""
+echo -e ${YELLOW}"Setting Numix Circle icons as default"${RESET}
+gsettings set org.gnome.desktop.interface icon-theme "Numix-Circle"
+echo -e ${GREEN}'[+]'${RESET} "Successfully configured Numix Circle icons"
+
+# Set wallpaper
+echo ""
+echo -e ${YELLOW}"Changing the wallpaper"${RESET}
+mv wallpaper.jpg $HOME/Pictures
+gsettings set org.gnome.desktop.background picture-uri file:///$HOME/Pictures/wallpaper.jpg
+echo ${GREEN}'[+]'${RESET} "Successfully changed wallpaper"
 
 echo ""
 echo -e ${GREEN}'[+]'${RESET} "Installation and configuration completed!"
