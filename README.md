@@ -1,4 +1,4 @@
-# Linux Post Installation Script [![version](https://img.shields.io/badge/version-1.0-red.svg)](https://semver.org)
+# Linux Post Installation Script [![version](https://img.shields.io/badge/version-1.1-red.svg)](https://semver.org)
 
 This script is just a used to automatically install and configure software that I use on every Linux distribution. Usually it's best run right after a clean install of Linux. The included software is as follows:
 
@@ -24,6 +24,10 @@ This script is just a used to automatically install and configure software that 
 * Blurry wallpaper (helps with visibility of the Conky clock)
 * Numix Circle Icons
 
+## Visual Demo
+#### Desktop look
+![Visual Demo](visual-demo.jpg)
+
 ### Note
 This script will prompt you to update your system, as well as install the required tools. It is recommended to accept both prompts, but it is not required to do so. 
 
@@ -39,4 +43,5 @@ Clone this repository: `git clone https://github.com/kostoskistefan/linux-post-i
 
 Change to the cloned directory: `cd linux-post-install`
 
-Run the script: `sudo ./install.sh`
+Run the script: `./install.sh`
+
