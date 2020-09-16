@@ -7,8 +7,6 @@ This script is just a used to automatically install and configure software that 
 * Zsh
 * Neovim
 * Tmux
-* NodeJS
-* Node Package Manager (NPM)
 * Google Chrome
 * Visual Studio Code
 * Conky
@@ -32,7 +30,6 @@ This script will prompt you to update your system, as well as install the requir
 ## Requirements
 * Advanced Package Tool (APT)
 * Client URL (cURL)
-* Wget
 * Unzip
 * Git
 * GNOME Tweak Tool

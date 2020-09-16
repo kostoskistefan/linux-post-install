@@ -11,7 +11,7 @@ script_location="$(cd "$(dirname "$0")" > /dev/null 2>&1 ; pwd -P)"
 # Check if running as root
 if [[ "$EUID" -eq 0 ]]
 then
-    echo -e ${RED}'[-]'${RESET} "It is not recommended to run this script as root. Please retry from a lower privileged user account!"
+    echo -e ${RED}'[-]'${RESET} "It is not recommended to run this script as root. Please re-run it with a standard user account!"
     exit 2
 fi
 
@@ -30,7 +30,7 @@ echo -e ${YELLOW}'[!]'${RESET} This script requires a few tools to be installed!
 while true; do
     read -p "Would you like to install the missing tools? (y/n) " yn
     case $yn in
-        [Yy]* ) sudo apt install -q git curl wget unzip gnome-tweaks; break;;
+        [Yy]* ) sudo apt install -q git curl unzip gnome-tweaks; break;;
         [Nn]* ) break;;
         * ) echo "Please answer yes or no.";;
     esac
@@ -48,9 +48,6 @@ declare -a apt_apps=(
     "tmux"
     "jq"
     "conky"
-    "nodejs"
-    "npm"
-    "code"
     "numix-icon-theme-circle")
 
 # Install the packages
@@ -68,13 +65,23 @@ do
 done
 
 echo -e ${YELLOW}"Installing Google Chrome Browser"${RESET}
-if [ $(dpkg-query -W -f='${Status}' startup-settings 2>/dev/null | grep -c "ok installed" ) -ne 0 ]
+if [ $(dpkg-query -W -f='${Status}' google-chrome-stable 2>/dev/null | grep -c "ok installed" ) -ne 0 ]
 then
     echo -e ${YELLOW}'[!]'${RESET} "Google Chrome Browser installation detected. Skipping!"
 else
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    sudo apt install ./google-chrome-stable_current_amd64.deb
+    curl -L https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o $script_location/chrome.deb
+    sudo apt install $script_location/chrome.deb
     echo -e ${GREEN}'[+]'${RESET} "Successfully installed Google Chrome Browser"
+fi
+
+echo -e ${YELLOW}"Installing Visual Studio Code"${RESET}
+if [ $(dpkg-query -W -f='${Status}' code 2>/dev/null | grep -c "ok installed" ) -ne 0 ]
+then
+    echo -e ${YELLOW}'[!]'${RESET} "Visual Studio Code installation detected. Skipping!"
+else
+    curl -L https://go.microsoft.com/fwlink/\?LinkID\=760868 -o $script_location/code.deb
+    sudo apt install $script_location/code.deb
+    echo -e ${GREEN}'[+]'${RESET} "Successfully installed Visual Studio Code"
 fi
 
 echo 
@@ -221,8 +228,8 @@ if [ $(dpkg-query -W -f='${Status}' startup-settings 2>/dev/null | grep -c "ok i
 then
 	echo -e ${YELLOW}'[!]'${RESET} "GNOME Startup-Manager installation detected. Skipping!"
 else
-	wget https://github.com/hant0508/startup-settings/raw/master/debian/startup-settings-amd64.deb
-	sudo dpkg -i startup-settings-amd64.deb
+	curl -L https://github.com/hant0508/startup-settings/raw/master/debian/startup-settings-amd64.deb -o $script_location/startup.deb
+	sudo apt install $script_location/startup.deb
 	echo -e ${GREEN}'[+]'${RESET} "Successfully installed GNOME Startup-Manager"
 fi
 
@@ -254,7 +261,9 @@ echo -e ${GREEN}'[+]'${RESET} "Installation and configuration completed!"
 
 echo -e ${GREEN}'[+]'${RESET} "Cleaning Up!"
 [ -f "$script_location/dash.zip" ] && sudo rm $script_location/dash.zip
-[ -f "$script_location/google-chrome-stable_current_amd64.deb" ] && sudo rm $script_location/google-chrome-stable_current_amd64.deb
+[ -f "$script_location/chrome.deb" ] && sudo rm $script_location/chrome.deb
+[ -f "$script_location/code.deb" ] && sudo rm $script_location/code.deb
+[ -f "$script_location/startup.deb" ] && sudo rm $script_location/startup.deb
 [ -d "$script_location/conky-Vision" ] && sudo rm -rf $script_location/conky-Vision
 
 echo -e ${YELLOW}"Please restart your computer for all changes to take effect!"${RESET}
