@@ -48,7 +48,8 @@ declare -a apt_apps=(
     "tmux"
     "jq"
     "conky"
-    "numix-icon-theme-circle")
+    "numix-icon-theme-circle"
+    "flameshot")
 
 # Install the packages
 for package in "${apt_apps[@]}"
@@ -219,18 +220,6 @@ else
 	sudo mkdir /usr/share/fonts/googlefonts
 	sudo curl https://raw.githubusercontent.com/google/fonts/master/ofl/poiretone/PoiretOne-Regular.ttf > /usr/share/fonts/googlefonts/PoiretOne-Regular.ttf
 	echo -e ${GREEN}'[+]'${RESET} "Successfully installed Poiret-One font"
-fi
-
-# Install GNOME Startup-Manager
-echo 
-echo -e ${YELLOW}"Installing GNOME Startup-Manager"${RESET}
-if [ $(dpkg-query -W -f='${Status}' startup-settings 2>/dev/null | grep -c "ok installed" ) -ne 0 ]
-then
-	echo -e ${YELLOW}'[!]'${RESET} "GNOME Startup-Manager installation detected. Skipping!"
-else
-	curl -L https://github.com/hant0508/startup-settings/raw/master/debian/startup-settings-amd64.deb -o $script_location/startup.deb
-	sudo apt install $script_location/startup.deb
-	echo -e ${GREEN}'[+]'${RESET} "Successfully installed GNOME Startup-Manager"
 fi
 
 # Install Numix Circle Icons

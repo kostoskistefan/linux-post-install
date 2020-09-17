@@ -10,7 +10,7 @@ This script is just a used to automatically install and configure software that 
 * Google Chrome
 * Visual Studio Code
 * Conky
-* GNOME Startup Settings
+* Flameshot
 * GNOME Dash-To-Panel Extension
 
 #### Software used for visual aesthetics
@@ -44,4 +44,3 @@ Clone this repository: `git clone https://github.com/kostoskistefan/linux-post-i
 Change to the cloned directory: `cd linux-post-install`
 
 Run the script: `./install.sh`
-
