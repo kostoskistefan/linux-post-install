@@ -1,6 +1,6 @@
 # Linux Post Installation Script [![version](https://img.shields.io/badge/version-1.1-red.svg)](https://semver.org)
 
-This script is just a used to automatically install and configure software that I use on every Linux distribution. Usually it's best run right after a clean install of Linux. The included software is as follows:
+This script is just a used to automatically install and configure software that I use on every Debian based Linux distribution. Usually it's best run right after a clean install of Linux. The included software is as follows:
 
 #### Software used for functionality
 
